@@ -100,8 +100,8 @@ module.exports = function (defaultFuncs, api, ctx) {
 				return callback(null, formatData(resData.data));
 			})
 			.catch(function (err) {
-				log.error("setPostReaction", err);
-				return callback(err);
+				//log.error("setPostReaction", err);
+				//return callback(err);
 			});
 
 		return returnPromise;

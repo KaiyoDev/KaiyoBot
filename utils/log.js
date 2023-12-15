@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const gradient = require('gradient-string');
 const con = require('./../config.json');
-const theme = con.DESIGN.Theme;
+const theme = 'Blue';
 let co;
 let error;
 if (theme.toLowerCase() === 'blue') {

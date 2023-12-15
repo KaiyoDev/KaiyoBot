@@ -7,88 +7,102 @@ const net = require('net');
 const chalk = require('chalk');
 const pkg = require('./package.json');
 const axios = require('axios');
-
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Ho_Chi_Minh');
+const vietnamTime = moment();
 const getRandomPort = () => Math.floor(Math.random() * (65535 - 1024) + 1024);
 const PORT = getRandomPort();
 let currentPort = PORT;
 const REPL_HOME = `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`.toLowerCase();
 
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '/includes/login/cover/index.html'));
-});
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/kaiyo.html')));
 
-app.get('/', (req, res) => res.sendStatus(200));
+console.clear();
+console.log(chalk.bold.dim(`
+            #               #
+          ##                 ##
+         ##                   ##
+        ##                     ##
+        ##                     ##
+        ##                     ##
+         ##                   ##
+     ##  ##                   ##  ##
+    ##   ##                   ##   ##
+   ##     ##                 ##     ##
+   #       ###             ###       #
+   ##       ###           ###       ##
+   ###       ###  #####  ###       ###
+    ######    #############   #######
+         ######################
+    ################################
+   ### ########################## ###
+  ###         ############         ###
+ ##         #################        ##
+ ##     ########################     ##
+##     ###  ################  ###     ##
+ ##    ##   #######  #######   ##    ##
+  #    ##   #######  #######   ##    #
+   #   ##   ################   ##   #
+    #  ##    ##############    ##  #
+       ##     ############     ##
+       ##       ########       ##
+        ##                    ##
+        
+© 2017 - 2023 | KaiyoSadboy - All Rights Reserved.
+----------------KaiyoBot---(${pkg.version})---------------`));
 
-setInterval(uptime, 1000);
+startBot(0);
 
-function uptime() {
-  axios.get(REPL_HOME).then(() => {}).catch(() => {});
+function startServer(port) {
+  app.listen(port, () => {
+    const formattedTime = vietnamTime.format('dddd, DD-MM-YYYY HH:mm:ss');
+
+    logger.loader(`Thời gian hiện tại: ${formattedTime}`);
+    logger.loader(`Bot đang chạy trên cổng: ${port}`);
+
+    const apiUrl = `https://api.kaiyocoder.repl.co/addurl?url=${encodeURIComponent(REPL_HOME)}`;
+    axios.get(apiUrl)
+      .then(response => {
+        if (response.data.success && response.data.data && response.data.data.status) {
+            logger.loader('Đã uptime thành công!!!');
+        } else {
+          console.error('Phản hồi không mong muốn từ API:', response.data);
+        }
+      })
+      .catch(error => {
+        console.error('Lỗi khi gửi yêu cầu đến API:', error.message);
+      });
+  });
+
+  app.on('error', (error) => {
+    logger(`Đã xảy ra lỗi khi khởi động máy chủ: ${error}`, "HỆ THỐNG");
+  });
 }
 
-  console.clear();
-  console.log(chalk.bold.dim(` ${process.env.REPL_SLUG}`.toUpperCase() + `(v${pkg.version})`));
-  logger(`Getting Started!`, "STARTER");
-  startBot(0);
+startServer(currentPort);
 
-  async function isPortAvailable(port) {
-    return new Promise((resolve) => {
-      const tester = net.createServer()
-        .once('error', () => resolve(false))
-        .once('listening', () => {
-          tester.once('close', () => resolve(true)).close();
-        })
-        .listen(port, '127.0.0.1');
-    });
-  }
-
-  function startServer(port) {
-    app.listen(port, () => {
-      logger.loader(`Bot is running on port: ${port}`);
-      logger.loader(`Activating uptime for ${chalk.underline(`'${REPL_HOME}'`)}`, 'SYSTEM');
+async function startBot(index) {
+  try {
+    const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "main.js"], {
+      cwd: __dirname,
+      stdio: "inherit",
+      shell: true,
+      env: {
+        ...process.env,
+        CHILD_INDEX: index,
+      },
     });
 
-    app.on('error', (error) => {
-      logger(`An error occurred while starting the server: ${error}`, "SYSTEM");
-    });
-  }
-
-// # Please note that sometimes this function is the reason the bot will auto-restart, even if your custom.js auto-restart is set to false. This is because the port switches automatically if it is unable to connect to the current port. ↓↓↓↓↓↓
-
-  async function startBot(index) {
-    try {
-      const isAvailable = await isPortAvailable(currentPort);
-      if (!isAvailable) {
-        logger(`Retrying...`, "SYSTEM");
-        const newPort = getRandomPort();
-        logger.loader(`Current port ${currentPort} is not available. Switching to new port ${newPort}.`);
-        currentPort = newPort;
+    child.on("close", (codeExit) => {
+      if (codeExit !== 0) {
+        startBot(index);
       }
-      
-      startServer(currentPort);
+    });
 
-      const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "main.js"], {
-        cwd: __dirname,
-        stdio: "inherit",
-        shell: true,
-        env: {
-          ...process.env,
-          CHILD_INDEX: index,
-        },
-      });
-
-      child.on("close", (codeExit) => {
-        if (codeExit !== 0) {
-          startBot(index);
-        }
-      });
-
-      child.on("error", (error) => {
-        logger(`An error occurred while starting the child process: ${error}`, "SYSTEM");
-      });
-    } catch (err) {
-      logger(`Error while starting the bot: ${err}`, "SYSTEM");
-    }
+    child.on("error", (error) => {
+      logger(`Đã xảy ra lỗi khi khởi động quá trình con: ${error}`, "HỆ THỐNG");
+    });
+  } catch (err) {
+    logger(`Lỗi khi khởi động bot: ${err}`, "HỆ THỐNG");
   }
-
-  // __@YanMaglinte was Here__ //
-// -----------------------------//
+}

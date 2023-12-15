@@ -1,6 +1,6 @@
 {
-  "name": "botpack",
-  "version": "1.5.1",
+  "name": "Kaiyo",
+  "version": "3.0.0",
   "description": "A Simple BotPack for starting a Messenger chatbot.",
   "main": "index.js",
   "keywords": [
@@ -20,6 +20,7 @@
     "aes-js": "^3.1.2",
     "axios": "^1.5.0",
     "bluebird": "^3.7.2",
+    "canvas": "^2.11.2",
     "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
     "child_process": "^1.0.2",

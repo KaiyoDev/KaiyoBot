@@ -3,7 +3,7 @@
 const config = require("./../../config.json");
 const gradient = require("gradient-string");
 const chalk = require("chalk");
-const theme = config.DESIGN.Theme.toLowerCase();
+const theme = 'Blue';
 let cra;
 let co;
 
@@ -133,7 +133,7 @@ function buildAPI(globalOptions, html, token, jar) {
   }
 
   var userID = i_user || c_user;
-  console.log(co("[ DATABASE ]"), (cra("[ CONNECT ]")), `Logged in as ${userID}`);
+  console.log(co("[ DATABASE ]"), `Đăng nhập tại UID ${userID}`);
   var clientID = (Math.random() * 2147483648 | 0).toString(16);
   var api = {
     setOptions: setOptions.bind(null, globalOptions),
@@ -154,7 +154,7 @@ function buildAPI(globalOptions, html, token, jar) {
     irisSeqID = oldFBMQTTMatch[1];
     mqttEndpoint = oldFBMQTTMatch[2];
     region = new URL(mqttEndpoint).searchParams.get("region").toUpperCase();
-    console.log(co("[ DATABASE ]"), (cra("[ CONNECT ]")), `Account's message region: ${region}`);
+    console.log(co("[ DATABASE ]"), `Sever hiện tại là: ${region}`);
   } else {
     let newFBMQTTMatch = html.match(/{"app_id":"219994525426954","endpoint":"(.+?)","iris_seq_id":"(.+?)"}/);
     if (newFBMQTTMatch) {
@@ -503,7 +503,9 @@ function loginHelper(appState, email, password, globalOptions, callback, prCallb
   // At the end we call the callback or catch an exception
   mainPromise
     .then(function() {
-      console.log(co("[ DATABASE ]"), (cra("[ CONNECT ]")), 'Done logging in.'); return callback(null, api);
+      console.log(co("[ DATABASE ]"), 'Cảm ơn bạn đã sử dụng fca của Kaiyo UwU');
+      console.log(co("[ DATABASE ]"), 'Đăng nhập thành công.'); return callback(null, api);
+      
     })
     .catch(function(e) {
       log.error("login", e.error || e);

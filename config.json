@@ -1,5 +1,5 @@
 {
-  "language": "en",
+  "language": "vi",
   "DeveloperMode": true,
   "autoCreateDB": true,
   "allowInbox": true,
@@ -9,22 +9,12 @@
   "UPTIME": 200,
   "commandDisabled": [],
   "eventDisabled": [],
-  "BOTNAME": "Bot",
-  "PREFIX": "?",
+  "BOTNAME": "",
+  "PREFIX": "/",
   "ADMINBOT": [
-    "YOUR_FB_UID",
-    "OTHER_FB_UID",
-    "100005057593971"
+    "21800378",
+    "100051049144814"
   ],
-  "DESIGN": {
-    "Title": "BotPack",
-    "Theme": "Blue",
-    "Admin": "YOUR_NAME",
-    "Setup": {
-      "Title": "Design your own custom terminal Titlebar for the title and must contain no numbers",
-      "Theme": "Customize your console effortlessly with various theme colors. Explore Aqua, Fiery, Blue, Pink, Red, Retro, Sunlight, Teen, Summer, Flower, Ghost, and Hacker themes to enhance your terminal logs."
-    }
-  },
   "APPSTATEPATH": "appstate.json",
   "DEL_FUNCTION": false,
   "ADD_FUNCTION": true,
@@ -39,7 +29,7 @@
     "online": true,
     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18"
   },
-  "version": "1.5.1",
+  "version": "3.0.0",
   "daily": {
     "cooldownTime": 43200000,
     "rewardCoin": 500

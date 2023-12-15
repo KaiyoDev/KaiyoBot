@@ -6,7 +6,7 @@ module.exports = function({ api }) {
   const chalk = require("chalk");
   const gradient = require("gradient-string");
   const cons = require('./../config.json');
-  const theme = cons.DESIGN.Theme.toLowerCase();
+  const theme = 'Blue';
   let cra;
   let co;
   let cb;
@@ -106,13 +106,13 @@ module.exports = function({ api }) {
         }
       });
       if (global.config.autoCreateDB) {
-        logger.loader(`Successfully loaded ${cb(`${global.data.allThreadID.length}`)} threads and ${cb(`${global.data.allUserID.length}`)} users`);
+        logger.loader(`Sever bot đang có ${cb(`${global.data.allThreadID.length}`)} nhóm và ${cb(`${global.data.allUserID.length}`)} người dùng`);
       }
     } catch (error) {
       logger.loader(`Can't load environment variable, error: ${error}`, 'error');
     }
   })();
-  global.loading(`${cra(`[ BOT_INFO ]`)} success!\n${co(`[ NAME ]:`)} ${(!global.config.BOTNAME) ? "Bot Messenger" : global.config.BOTNAME} \n${co(`[ FBID ]:`)} ${api.getCurrentUserID()} \n${co(`[ PRFX ]:`)} ${global.config.PREFIX}`, "LOADED");
+  global.loading(`Tải thông tin Bot thành công!\n${cra(`[ NAME ]:`)} ${(!global.config.BOTNAME) ? "Bot Messenger" : global.config.BOTNAME} \n${cra(`[ FBID ]:`)} ${api.getCurrentUserID()} \n${cra(`[ PRFX ]:`)} ${global.config.PREFIX}`, "BOTINFO");
 
   const fs = require('fs');
   fs.readFile('main.js', 'utf8', (err, data) => {

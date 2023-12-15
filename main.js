@@ -68,7 +68,7 @@ global.account = new Object();
 // ────────────────── //
 const chalk = require("chalk");
 const gradient = require("gradient-string");
-const theme = config.DESIGN.Theme;
+const theme = 'fiery';
 let cra;
 let co;
 let cb;
@@ -153,14 +153,14 @@ const confg = './config.json';
 try {
   global.client.configPath = join(global.client.mainPath, "config.json");
   configValue = require(global.client.configPath);
-  logger.loader("Found config.json file!");
+  logger.loader("Đang tìm file congfig.json...");
 } catch (e) {
   return logger.loader('"config.json" file not found."', "error");
 }
 
 try {
   for (const key in configValue) global.config[key] = configValue[key];
-  logger.loader("Config Loaded!");
+  logger.loader("Đã kết nói với congfig.json thành công!");
 } catch (e) {
   return logger.loader("Can't load file config!", "error")
 }
@@ -204,9 +204,9 @@ global.getText = function(...args) {
 try {
   var appStateFile = resolve(join(global.client.mainPath, config.APPSTATEPATH || "appstate.json"));
   var appState = ((process.env.REPL_OWNER || process.env.PROCESSOR_IDENTIFIER) && (fs.readFileSync(appStateFile, 'utf8'))[0] != "[" && config.encryptSt) ? JSON.parse(global.utils.decryptState(fs.readFileSync(appStateFile, 'utf8'), (process.env.REPL_OWNER || process.env.PROCESSOR_IDENTIFIER))) : require(appStateFile);
-  logger.loader("Found the bot's appstate.")
+  logger.loader("Đã tìm thấy file appstate.")
 } catch (e) {
-  logger.loader("Can't find the bot's appstate.", "error");
+  logger.loader("Vui lòng kiểm tra lại file appstate.", "error");
   const fig = JSON.parse(fs.readFileSync(confg, 'utf8'));
   fig.CONNECT_LOG = false;
   fs.writeFileSync(confg, JSON.stringify(fig, null, 2), 'utf8');
@@ -227,8 +227,6 @@ function onBot() {
         return process.exit(0)
       }
     }
-    const custom = require('./custom');
-    custom({ api: api });
 
     const fbstate = api.getAppState();
     api.setOptions(global.config.FCAOption);
@@ -247,7 +245,10 @@ function onBot() {
       (async () => {
         const commandsPath = `${global.client.mainPath}/modules/commands`;
         const listCommand = readdirSync(commandsPath).filter(command => command.endsWith('.js') && !command.includes('example') && !global.config.commandDisabled.includes(command));
-        console.log(cv(`\n` + `──LOADING COMMANDS─●`));
+        console.log(cv(`
+        ┌──────────────────────┐
+        ║───LOADING COMMANDS──●║
+        └──────────────────────┘`));
         for (const command of listCommand) {
           try {
             const module = require(`${commandsPath}/${command}`);
@@ -327,7 +328,7 @@ function onBot() {
             if (module.handleEvent) global.client.eventRegistered.push(config.name);
             global.client.commands.set(config.name, module);
             try {
-              global.loading(`${cra(`LOADED`)} ${cb(config.name)} success`, "COMMAND");
+              global.loading(`${cra(`LOADED`)} ┈➤ •${cb(config.name)}• ✅`, "COMMAND");
             } catch (err) {
               console.error("An error occurred while loading the command:", err);
             }
@@ -341,7 +342,10 @@ function onBot() {
 
       (async () => {
         const events = readdirSync(join(global.client.mainPath, 'modules/events')).filter(ev => ev.endsWith('.js') && !global.config.eventDisabled.includes(ev));
-        console.log(cv(`\n` + `──LOADING EVENTS─●`));
+        console.log(cv(`
+        ┌─────────────────────┐
+        ║───LOADING EVENTS───●║
+        └─────────────────────┘`));
         for (const ev of events) {
           try {
             const event = require(join(global.client.mainPath, 'modules/events', ev));
@@ -394,16 +398,19 @@ function onBot() {
               await onLoad(eventData);
             }
             global.client.events.set(config.name, event);
-            global.loading(`${cra(`LOADED`)} ${cb(config.name)} success`, "EVENT");
+            global.loading(`${cra(`LOADED`)} ┈➤ •${cb(config.name)}• ☑️`, "EVENTS");
           }
           catch (err) {
             global.loading.err(`${chalk.hex("#ff0000")('ERROR!')} ${cb(ev)} failed with error: ${err.message}` + `\n`, "EVENT");
           }
         }
       })();
-    console.log(cv(`\n` + `──BOT START─● `));
-    global.loading(`${cra(`[ SUCCESS ]`)} Loaded ${cb(`${global.client.commands.size}`)} commands and ${cb(`${global.client.events.size}`)} events successfully`, "LOADED");
-    global.loading(`${cra(`[ TIMESTART ]`)} Launch time: ${((Date.now() - global.client.timeStart) / 1000).toFixed()}s`, "LOADED");
+    console.log(cv(`
+         ┌───────────────────┐
+         ║─────BOT START────●║
+         └───────────────────┘`));
+    global.loading(`Đã loaded ${cb(`${global.client.commands.size}`)} commands và ${cb(`${global.client.events.size}`)} events thành công`, "LOADING");
+    global.loading(`Thời gian khởi động: ${((Date.now() - global.client.timeStart) / 1000).toFixed()}s`, "LOADING");
     global.utils.complete({ api });
     const listener = require('./includes/listen')({ api: api });
     global.handleListen = api.listenMqtt(async (error, event) => {
@@ -429,8 +436,11 @@ function onBot() {
 
 (async () => {
   try {
-    console.log(cv(`\n` + `──DATABASE─●`));
-    global.loading(`${cra(`[ CONNECT ]`)} Connected to JSON database successfully!`, "DATABASE");
+    console.log(cv(`
+        ┌───────────────────┐
+        ║─────DATABASE─────●║
+        └───────────────────┘`));
+    global.loading(`Kết nối thành công với cơ sở dữ liệu JSON!`, "DATABASE");
     onBot();
   } catch (error) {
     global.loading.err(`${cra(`[ CONNECT ]`)} Failed to connect to the JSON database: ` + error, "DATABASE");

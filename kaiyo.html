@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: black;
+    }
+
+    .matrix-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    canvas {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .text-container {
+        white-space: pre;
+        color: lime;
+        text-shadow: 0 0 5px lime;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        padding-top: 50px;
+    }
+
+    a {
+        background-color: transparent;
+        border: 2px solid lime;
+        color: lime;
+        border-radius: 5px;
+        padding: 10px 20px;
+        outline: none;
+        cursor: pointer;
+        text-decoration: none;
+        text-shadow: 0 0 5px lime;
+    }
+
+    a:hover {
+        box-shadow: 0 0 10px lime;
+        text-decoration: none;
+    }
+
+    #navbar {
+        position: fixed;
+        top: 0;
+        left: 50;
+        right: 50;
+        background-color: transparent;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+        z-index: 1;
+    }
+
+    #navbar a {
+        margin-left: 10px;
+        margin-right: 10px;
+        color: lime;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 5px;
+        text-shadow: 0 0 5px lime;
+    }
+
+    #navbar a:hover {
+        text-shadow: 0 0 10px lime;
+    }
+    </style>
+</head>
+<body>
+    <div class="ascii-container">
+        <canvas id="c"></canvas>
+        <div class="text-container">
+            <div id="navbar"> <a href="https://fb.com/andeptrai06">FaceBook</a> <a href="https://www.youtube.com/andeptrai06"><i class="fa fa-youtube-play"></i> Youtube</a> <a href="https://fb.com/dhannn.06">Contact</a> </div>
+            <pre>
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠲⢤⣄⡀⠀⣇⠀⠀⠀⠀⠀⠀⠀⠈⠓⠷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠊⠀⠀⠀⢠⠏⠀⠀⠀⠀⠀⠴⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢯⡓⠾⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⢀⡾⠖⠚⠀⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⠤⠔⠒⠒⠲⠿⣦⣈⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⠇⠀⢀⣾⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⢓⢤⡤⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣞⣠⠔⢉⡞⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠻⡦⣤⣀⣠⠤⠤⠒⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠤⠖⢚⣛⣿⠿⠶⠶⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠉⠁⢠⡞⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠹⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⠋⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠴⠯⣤⣀⡀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡼⢻⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⡀⢸⠀⢸⢁⡤⠴⠶⠤⠤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⢬⣭⣷⣦⣄⠀
+⠀⠀⠀⠀⢰⠃⠄⣿⣿⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⣋⡥⠴⠶⣾⣿⢦⢻⠿⠒⠛⠉⠉⠛⠒⠲⢯⣻⣆⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠦⣄⠀
+⠀⠀⣿⣍⢹⡿⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⣠⠖⠀⠀⠀⠀⠀⣼⠟⠁⢠⠞⢉⡽⠋⡹⠸⣄⠀⠀⠀⠀⠀⠀⠀⠀⠈⠟⢷⡦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙
+⠀⠀⠀⣻⠏⢀⣀⡠⠀⠀⠀⠀⠀⠀⢀⡼⢁⡤⠀⠀⠀⡠⡺⠃⠀⠀⣿⠀⡞⠀⠀⢧⡀⠙⣆⠀⠀⠀⠀⠀⠀⠀⠀⠐⠅⡙⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⣠⡞⠡⠊⠁⠀⠀⠀⢤⡤⠀⢤⣤⡞⢠⡞⠁⠀⢀⠾⠈⠀⣠⠄⠀⢸⣸⡇⠀⠀⠈⠳⣄⠈⠳⣄⠀⠀⠀⠀⠀⠀⠀⠣⣻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒⠄⡀⠀
+⡀⠉⠉⠉⣻⣲⡖⠰⠀⠀⠀⠀⣔⡞⢠⠏⠀⠀⢠⠏⠀⠀⣴⠋⠀⠀⡄⠻⡇⡆⠀⠀⠀⠈⠙⠲⠬⣽⣶⣄⡀⠀⠀⠀⠀⣽⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠈⠳
+⠅⠀⠀⣠⠞⠁⣠⠀⠀⠀⠀⠀⡴⠀⣼⠇⠀⠀⣿⡇⠀⣸⣿⠀⠀⣼⠁⠀⣿⡅⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠳⠦⠀⠀⠀⠘⣇⠀⠀⠀⢶⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢳⠀
+⠀⢠⣾⣷⣿⠛⠁⠀⠀⠀⠀⢠⡄⢠⣿⠀⠈⣸⢹⡄⢠⡏⡏⠀⢸⢿⠀⢠⡏⡁⠀⠀⠀⣰⠀⠀⠀⠀⠀⠀⢆⠀⠀⠀⠀⠀⢺⡇⠀⠀⠘⣆⢳⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠡
+⣀⣽⠿⠟⠉⠀⠀⠀⠀⠀⠀⢸⠇⢸⠐⣇⢠⣿⠇⣇⢿⡇⣇⠀⡏⢸⠀⢸⠀⢧⠀⠀⠀⡿⠀⠀⠀⡇⠀⠀⢸⡄⠀⠀⠀⠀⠀⠠⡄⠂⠀⢹⠀⢇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠿⠳⣆⡀⠀⠀⠀⠀⢀⡀⠀⠜⣷⣸⡆⢸⡸⣹⠀⣀⡾⣇⠸⣴⡇⠈⡆⣸⠀⠸⡀⠀⣸⣿⠀⠀⢸⣇⠀⠀⠀⣧⠀⠀⡄⠀⠀⠀⢻⠁⠀⠸⡇⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⡀⠀⠈⠹⢷⣦⣤⡲⠋⠃⠀⠀⣷⢻⣇⠀⠀⣿⠉⢹⢿⣟⠶⣼⣇⢠⢉⣿⡄⠀⢧⠀⡏⣿⣆⠀⢸⡿⡄⠀⠀⢸⡰⠀⣿⡀⠀⠀⠘⡇⠀⢠⡇⢸⠀⠀⠀⠀⠀⠀⠘⢶⡄⠀⠀
+⡇⠀⠀⠀⠀⢿⡟⠁⣀⣤⠄⠀⣼⣿⣿⡄⠀⡿⡄⣾⠉⣿⡀⣿⣿⠛⢾⣃⣧⠀⡘⣼⡇⢸⠘⡄⢸⢇⠙⣄⠀⢸⢿⣄⢸⣹⡀⠀⠀⡧⡀⢸⠀⢸⠀⠀⠀⠀⠀⠀⢠⣄⣉⣓⣶
+⣧⢀⡀⠀⢀⣿⣤⢾⣿⡏⠀⡸⣿⢿⣿⣿⣼⣇⣷⡇⠀⢻⣿⡏⣿⣇⣼⣽⠹⣧⠁⢸⢿⠐⣷⠾⢾⣺⡖⢿⢦⢼⣾⣿⣾⡇⣳⠀⢰⡇⣇⡞⡇⡎⠀⠀⠀⠀⠀⠀⠈⣧⠀⠈⠉
+⣿⣿⣿⣿⣿⣿⣿⣹⣿⠓⠐⡶⠏⣰⡿⢻⡿⣿⣼⣇⢀⡈⢻⠀⠘⢿⣿⠹⣆⣸⣧⣸⡈⢥⠸⣦⢸⣷⣻⡌⠁⣿⡁⣿⡟⣿⠿⡆⢸⢷⣿⠳⣻⠃⠀⢰⣤⡀⠀⠀⠀⢸⡄⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⣠⣺⣅⣯⣀⢻⡇⡇⠉⠻⠿⢎⣭⣭⡭⢿⠉⠀⠈⠻⢿⣿⡇⠀⢣⢹⣿⡇⠳⣿⣶⡏⣇⣿⢳⣿⠀⢹⣾⣼⠮⣴⠟⣇⡀⠘⡇⣙⠦⣄⠀⠈⡇⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠸⢮⠕⠙⣿⣟⢷⢷⡇⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠟⠀⠸⢿⣿⡳⢤⣙⡟⠀⢸⡟⠈⢽⣤⡟⠁⣼⠀⣿⡀⠹⡅⠀⣧⡏⠛⢮⣧⣠⡇⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣾⣽⠑⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠄⠀⠀⠀⠀⠀⠀⠙⠻⢷⣶⣶⣶⣶⣦⣀⡟⠙⡇⠀⣿⠀⣿⡧⣤⡈⣢⡉⢳⡂⠀⢹⣼⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣆⢆⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⠉⢸⢹⠀⣿⠀⡿⡇⡹⡟⠿⢦⣄⣙⣦⠀⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠘⢿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠘⣿⡧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⡿⠀⢸⡗⠂⣿⢼⣇⣷⣴⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⢻⣿⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⡿⠏⠀⢠⣿⠃⣼⡟⢸⠟⠁⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⢿⣿⣷⣄⠀⠀⠀⣠⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⠴⠞⠋⠀⠀⠀⣿⠏⢰⠟⣰⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠝⣼⣿⣿⣿⣷⠖⣫⠴⠙⠃⠀⠀⠀⠀⠀⣠⠴⠋⠁⠀⠀⠀⠀⠀⠀⠀⠁⠀⡟⣼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣦⣿⡿⠟⣋⣵⡾⡧⣄⣀⣀⣀⣠⣤⣤⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⢀⣰⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⡤⠶⢻⣟⣩⣴⣾⣿⣿⣿⣵⣻⣿⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⢀⣠⠖⢋⣩⣴⢻⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⣠⡤⠶⠚⠋⠉⠁⠀⠀⠠⣿⣿⣹⣿⣿⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⣠⡖⢋⣡⣶⡋⠁⠈⠙⠓⠲⠦⢤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣃⣀⣀⣀⣠⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⢀⣰⡇⡏⣾⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠈⠙⠛⢻⣿⣿⡇⠀⠀⠀⠀⠀⠀⠙⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⡿⣿⡿⣿⠏⠀⠀⠀⠀⠀⠀⠀⢀⡠⠖⠋⢿⠐⡇⢸⣾⣻⣿⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⣠⣾⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⢹⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣷⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⡘⠁⠀⠀⠀⡾⢰⠁⠸⣿⣿⣷⣿⣿⣿⣿⢯⣿⣿⣿⣿⣿⣿⡇⠀⢀⣰⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
+
+
+© 2017 - 2023 | KaiyoSadboy - All Rights Reserved. 
+
+        </pre>
+            <br>
+        </div>
+    </div>
+    <script>
+    // A set of characters to use for the glitch effect
+    var glitchChars = ['@', '#', '$', '%', '!', '?', '&', '/', '\\', '|', '_', ';', ':', ',', '.', ' ', ' ', ' '];
+
+    var asciiArt = document.querySelector('pre');
+    var originalAscii = asciiArt.textContent;
+
+    function glitchText() {
+        var newText = '';
+        for (var i = 0; i < originalAscii.length; i++) {
+            // Randomly decide whether to replace this character
+            if (Math.random() < 0.05) {
+                // Choose a random glitch character
+                var glitchChar = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                newText += glitchChar;
+            } else {
+                newText += originalAscii.charAt(i);
+            }
+        }
+        asciiArt.textContent = newText;
+    }
+
+    setInterval(glitchText, 100);  // Glitch every 100 milliseconds
+</script>
+
+</body>
+</html>

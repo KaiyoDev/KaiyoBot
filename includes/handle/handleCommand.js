@@ -22,13 +22,13 @@ module.exports = function({ api, models, Users, Threads, Currencies }) {
     const args = (body || '').trim().split(/ +/);
     const commandName = args.shift()?.toLowerCase();
     var command = commands.get(commandName);
-    const replyAD = '[ MODE ] - Only bot admin can use bot';
+    //const replyAD = '[ MODE ] - Only bot admin can use bot';
 
     if (command && (command.config.name.toLowerCase() === commandName.toLowerCase()) && (!ADMINBOT.includes(senderID) && adminOnly && senderID !== api.getCurrentUserID())) {
-      return api.sendMessage(replyAD, threadID, messageID);
+      return;
     }
     if (typeof body === 'string' && body.startsWith(PREFIX) && (!ADMINBOT.includes(senderID) && adminOnly && senderID !== api.getCurrentUserID())) {
-      return api.sendMessage(replyAD, threadID, messageID);
+      return;
     }
     if (userBanned.has(senderID) || threadBanned.has(threadID) || allowInbox == ![] && senderID == threadID) {
       if (!ADMINBOT.includes(senderID.toString())) {
@@ -57,7 +57,7 @@ module.exports = function({ api, models, Users, Threads, Currencies }) {
         if (checker.bestMatch.rating >= 0.5) {
           command = commands.get(checker.bestMatch.target);
         } else {
-          return api.sendMessage(global.getText("handleCommand", "commandNotExist", checker.bestMatch.target), threadID);
+          return;
         }
       }
     }

